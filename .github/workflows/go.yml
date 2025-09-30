@@ -1,0 +1,32 @@
+name: Go Quality Check
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.25.1'
+
+      - name: Install dependencies
+        run: make deps
+
+      - name: Check code format
+        run: make fmt-check
+
+      - name: Security audit
+        run: make audit
+
+      - name: Lint code
+        run: make lint
+
+      - name: Run tests with coverage
+        run: make coverage
